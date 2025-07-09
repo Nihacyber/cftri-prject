@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import Footer from "../components/Footer";
-import Select from "react-select";
 
 // Discussion Matter Options with their respective sub-options
 const discussionMatterOptions = [
@@ -20,76 +18,56 @@ const discussionMatterOptions = [
 ];
 
 const bakeryProductOptions = [
-  "Barley Instant Upma, Halwa and Rava Idly Mix",
-  "Sugar Free Biscuit",
-  "Baking Powder",
+  "Sugar-free Biscuit",
+  "Baking powder",
+  "Bread: Production (Brown, Plain, Sweet, Milk, Whole wheat, Fruit, High fiber, Ragi, Bajra)",
   "Composite Bajra Bread",
   "Composite Ragi Rusk",
-  "Onion Flavoured Biscuit",
+  "Onion-flavoured biscuit",
   "Wheat Germ Stabilization",
-  "Sugar Free Cup Cake",
+  "Sugar-free cup cake",
+  "Sugar-free cake rusk",
   "Instant Payasam Mix",
-  "Sugar Free Rusk",
-  "High Protein Rusk",
-  "Instant Cake Mix",
-  "Wheat Vermicelli",
-  "Fortified Protein Rich Vermicelli",
-  "Layered Parotta (South Indian)",
-  "Sugar Free Cake Rusk",
-  "Suruchi Meetha Burfi",
-  "Honey Based Bakery Products",
-  "Sugar Free Bread",
-  "Eggless Cake Premix",
-  "High Protein Biscuits",
-  "Shelf Stable Chapathi",
-  "Legume Based Pasta",
-  "Online Fortification of Atta or Maida",
-  "Fortified Whole Wheat Pasta",
-  "Production of Atta (Whole Wheat Flour)",
-  "Multigrain Bread",
-  "Gluten Free Bakery Products",
-  "Fenugreek Fiber & Gum",
-  "Low Glycemic Index (GI) Noodles",
-  "Atta with Multi Grains / Multi Whole Grains Flour",
-  "Multigrain Gluten Free Semolina (Sooji/Rava)",
-  "Multigrain Gluten Free Instant Halwa Mix",
-  "Multigrain Gluten Free Instant Rava Idli Mix",
-  "Multigrain Gluten Free Instant Upma Mix",
-  "Production of Pearl Millet Semolina (Sooji/Rava)",
-  "Production of Sorghum (Jowar) Semolina (Sooji/Rava)",
-  "Chocolate Pasta",
-  "Production of Refined Wheat Flour, Semolina & Resultant Atta by Roller Milling (UPDATED)",
-  "Shelf Stable Bread",
-  "Shelf Stable Muffins",
-  "Multigrain Pasta",
-  "Nutritious Soup/Bread Sticks",
-  "Baked Savory Snacks",
-  "Chestnut Based Gluten Free Cookies",
-  "TEST Record",
-  "Spice Bread",
-  "A Process for the Preparation of Bar Cake",
-  "Production of Ragi Biscuits",
-  "A Manufacturing Process for Multigrain Waffle",
-  "Bread: Production",
-  "Bar Cake",
-  "Sugar Free Cake Rusk",
-  "Instant Upma, Halva & Rava Idli Mix From Multigrain Semolina",
-  "Instant Upma & Rava Idli Mix From High Protein Semolina",
-  "Instant Upma Mix From Millets & Multimillets Semolina",
-  "Instant Halva Mix From Millets & Multimillets Semolina",
-  "Instant Rava Idli Mix From Millets & Multimillets Semolina",
-  "Production of High Fiber Semolina (Sooji/Rava)",
-  "Production of High Protein Semolina (Sooji/Rava)",
-  "Buckwheat Noodles/Pasta",
-  "Gluten Free Biscuits",
-  "Gluten Free Cookie Cake",
+  "Bar cake",
+  "Sugar-free rusk",
+  "High protein rusk",
+  "Cake rusk",
+  "Instant cake mix",
+  "Vermicelli (wheat & whole wheat flour)",
+  "Fortified protein-rich vemicelli",
+  "Layered parotta (South Indian)",
+  "Suruchi meetha-health food snacks (burfi)",
+  "Honey-based Bakery products",
+  "Atta with multi-grains/ multi-whole grains",
+  "Instant upma, halva & rava idli mix from multigrain semolina",
+  "Instant upma, halva & rava idli mix from high fiber semolina",
+  "Instant upma mix from millets & multimillets semolina",
+  "Instant halva mix from millets & multimillets semolina",
+  "Instant rava idli mix from millets & multimillets semolina",
+  "Production of high fiber semolina (sooji/rava)",
+  "Production of high protein semolina (sooji/rava)",
+  "Production of barley dahlia/semolina",
+  "Roller milling process for multigrain semolina (sooji/rava)",
+  "Roller milling process for semolina (sooji/rava) from millets & preparation of multimillets",
+  "Process for extension of shelf life of bread with natural preservatives",
+  "Shelf Stable muffins with natural preservatives",
+  "Nutritious high fiber soup sticks",
+  "Baked savory snacks",
+  "Preparation of chestnut-based gluten-free cookies",
+  "Ragi-based biscuit",
+  "Buckwheat Noodles (Soba)/Pasta",
+  "Gluten free Biscuit",
+  "Gluten free Cookie Cake",
   "Multigrain Nutri Cookies",
-  "Process for Production of Quinoa Germ",
-  "Fiber Enriched Rusk",
-  "Multigrain Pizza Base",
-  "Gluten Free Bread Premix – Proso Millet",
-  "Gluten Free Bread Premix – Foxtail Millet",
-  "Gluten Free Bread Premix – Barnyard Millet",
+  "Production of Quinoa Germ Preparation of Spice Bread",
+  "Preparation of Fibre Enriched Rusk",
+  "Process for Gluten Free Cake Mix",
+  "A process for the production of multigrain waffle",
+  "A process for the production of Multigrain Pizza Base",
+  "Process for development of gluten free bread premixes [three Versions] 1.Proso millet, 2. Foxtail millet and 3. Barnyard millet",
+  "Process for development of gluten free bread premix (Version -1) Proso millet",
+  "Process for development of gluten free bread premix (version-2) Foxtail millet",
+  "Development of gluten free bread premix (version-3) Baryard millet",
 ];
 
 const beverageProductOptions = [
@@ -516,6 +494,8 @@ const broadAreaOptions = [
 ];
 
 const typeOptions = [
+  "Industrial Collaboration",
+  "Technological Transfer",
   "Start-up",
   "MNC",
   "Women Entrepreneurship",
@@ -872,23 +852,6 @@ const UserRegister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate required enums before sending to backend
-    if (
-      !formData.onboarding.details.category ||
-      !["SC/ST", "General", "OBC"].includes(formData.onboarding.details.category)
-    ) {
-      alert("Please select a valid Category.");
-      return;
-    }
-    if (
-      !formData.onboarding.details.type ||
-      !typeOptions.includes(formData.onboarding.details.type)
-    ) {
-      alert("Please select a valid Type.");
-      return;
-    }
-
     const preparedData = {
       ...formData,
       onboarding: {
@@ -919,227 +882,191 @@ const UserRegister = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
-      <div className="flex-grow flex items-center justify-center p-4">
-        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-3xl">
-          <div className="p-8">
-            <div className="text-center mb-8">
-              <h2 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2">
-                User Registration
-              </h2>
-              <p className="text-gray-500">Create your account to get started</p>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-3xl">
+        <div className="p-8">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2">
+              User Registration
+            </h2>
+            <p className="text-gray-500">Create your account to get started</p>
+          </div>
 
-            <form onSubmit={handleSubmit}>
-              <div className="space-y-6">
-                <div className="bg-blue-50 p-4 rounded-xl">
-                  <h3 className="text-2xl font-semibold text-blue-700">
-                    Personal & Technical Details
-                  </h3>
+          <form onSubmit={handleSubmit}>
+            <div className="space-y-6">
+              <div className="bg-blue-50 p-4 rounded-xl">
+                <h3 className="text-2xl font-semibold text-blue-700">
+                  Personal & Technical Details
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="John Doe"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    required
+                  />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      placeholder="John Doe"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      required
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="john@example.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    required
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="john@example.com"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      required
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    required
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      name="password"
-                      placeholder="••••••••"
-                      value={formData.password}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      required
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    name="onboarding.details.subject"
+                    placeholder="Your subject"
+                    value={formData.onboarding.details.subject}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      name="onboarding.details.subject"
-                      placeholder="Your subject"
-                      value={formData.onboarding.details.subject}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Gender
+                  </label>
+                  <select
+                    name="onboarding.details.gender"
+                    value={formData.onboarding.details.gender}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Gender
-                    </label>
-                    <select
-                      name="onboarding.details.gender"
-                      value={formData.onboarding.details.gender}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    >
-                      <option value="">Select Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Category
+                  </label>
+                  <select
+                    name="onboarding.details.category"
+                    value={formData.onboarding.details.category}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  >
+                    <option value="">Select Category</option>
+                    <option value="SC/ST">SC/ST</option>
+                    <option value="General">General</option>
+                    <option value="OBC">OBC</option>
+                  </select>
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Category
-                    </label>
-                    <select
-                      name="onboarding.details.category"
-                      value={formData.onboarding.details.category}
-                      onChange={handleChange}
-                      required
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    >
-                      <option value="">Select Category</option>
-                      <option value="SC/ST">SC/ST</option>
-                      <option value="General">General</option>
-                      <option value="OBC">OBC</option>
-                    </select>
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Country
+                  </label>
+                  <input
+                    type="text"
+                    name="onboarding.details.country"
+                    placeholder="Country"
+                    value={formData.onboarding.details.country}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Country
-                    </label>
-                    <input
-                      type="text"
-                      name="onboarding.details.country"
-                      placeholder="Country"
-                      value={formData.onboarding.details.country}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    State
+                  </label>
+                  <input
+                    type="text"
+                    name="onboarding.details.state"
+                    placeholder="State"
+                    value={formData.onboarding.details.state}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      State
-                    </label>
-                    <input
-                      type="text"
-                      name="onboarding.details.state"
-                      placeholder="State"
-                      value={formData.onboarding.details.state}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Place
+                  </label>
+                  <input
+                    type="text"
+                    name="onboarding.details.place"
+                    placeholder="Place"
+                    value={formData.onboarding.details.place}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Place
-                    </label>
-                    <input
-                      type="text"
-                      name="onboarding.details.place"
-                      placeholder="Place"
-                      value={formData.onboarding.details.place}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Address
+                  </label>
+                  <input
+                    type="text"
+                    name="onboarding.details.address"
+                    placeholder="Full Address"
+                    value={formData.onboarding.details.address}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Address
-                    </label>
-                    <input
-                      type="text"
-                      name="onboarding.details.address"
-                      placeholder="Full Address"
-                      value={formData.onboarding.details.address}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Contact Number
-                    </label>
-                    <input
-                      type="tel"
-                      name="contact"
-                      placeholder="e.g. +91-9876543210"
-                      value={formData.contact}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Contact Number
+                  </label>
+                  <input
+                    type="tel"
+                    name="contact"
+                    placeholder="e.g. +91-9876543210"
+                    value={formData.contact}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg 
                focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
+                    required
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Organization Name
-                    </label>
-                    <input
-                      type="text"
-                      name="onboarding.details.organization"
-                      placeholder="Organization Name"
-                      value={formData.onboarding.details.organization || ""}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Type
-                    </label>
-                    <select
-                      name="onboarding.details.type"
-                      value={formData.onboarding.details.type}
-                      onChange={handleChange}
-                      required
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    >
-                      <option value="">Select Type</option>
-                      {typeOptions.map((t, i) => (
-                        <option key={i} value={t}>
-                          {t}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* <div>
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Date
                   </label>
@@ -1153,7 +1080,7 @@ const UserRegister = () => {
                   />
                 </div> */}
 
-                  {/* <div className="md:col-span-2">
+                {/* <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Topic of Interest
                   </label>
@@ -1193,256 +1120,184 @@ const UserRegister = () => {
                       ))}
                     </select>
                   </div>
-                }*/}
+                )} */}
 
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Project Type
+                  </label>
+                  <div className="flex gap-6">
+                    <label className="inline-flex items-center">
+                      <input
+                        type="radio"
+                        name="onboarding.details.projectMode"
+                        value="collaborative"
+                        checked={
+                          formData.onboarding.details.projectMode ===
+                          "collaborative"
+                        }
+                        onChange={handleChange}
+                        className="mr-2"
+                      />
+                      Collaborative Project
+                    </label>
+                    <label className="inline-flex items-center">
+                      <input
+                        type="radio"
+                        name="onboarding.details.projectMode"
+                        value="transfer"
+                        checked={
+                          formData.onboarding.details.projectMode === "transfer"
+                        }
+                        onChange={handleChange}
+                        className="mr-2"
+                      />
+                      Technology Transfer
+                    </label>
+                  </div>
+                </div>
+
+                {formData.onboarding.details.projectMode ===
+                  "collaborative" && (
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Bussiness Scale
+                      Collaborative Focus Areas
                     </label>
-                    <div className="flex gap-6">
-                      <label className="inline-flex items-center">
-                        <input
-                          type="radio"
-                          name="onboarding.details.projectMode"
-                          value="collaborative"
-                          checked={
-                            formData.onboarding.details.projectMode ===
-                            "collaborative"
-                          }
-                          onChange={handleChange}
-                          className="mr-2"
-                        />
-                        Collaborative Project
-                      </label>
-                      <label className="inline-flex items-center">
-                        <input
-                          type="radio"
-                          name="onboarding.details.projectMode"
-                          value="transfer"
-                          checked={
-                            formData.onboarding.details.projectMode === "transfer"
-                          }
-                          onChange={handleChange}
-                          className="mr-2"
-                        />
-                        Technology Transfer
-                      </label>
-                    </div>
-                  </div>
-
-                  {formData.onboarding.details.projectMode ===
-                    "collaborative" && (
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Collaborative Focus Areas
-                      </label>
-                      <div className="space-y-2">
-                        {[
-                          "Product Development",
-                          "Process Optimization",
-                          "Shelf-life Extension",
-                        ].map((option) => (
-                          <label key={option} className="flex items-center gap-2">
-                            <input
-                              type="checkbox"
-                              value={option}
-                              checked={formData.onboarding.details.collaborativeOptions?.includes(
-                                option
-                              )}
-                              onChange={(e) => {
-                                const updated = e.target.checked
-                                  ? [
-                                      ...formData.onboarding.details
-                                        .collaborativeOptions,
-                                      option,
-                                    ]
-                                  : formData.onboarding.details.collaborativeOptions.filter(
-                                      (o) => o !== option
-                                    );
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  onboarding: {
-                                    ...prev.onboarding,
-                                    details: {
-                                      ...prev.onboarding.details,
-                                      collaborativeOptions: updated,
-                                    },
-                                  },
-                                }));
-                              }}
-                            />
-                            {option}
-                          </label>
-                        ))}
-
-                        {/* Others input */}
-                        <label className="block text-sm font-medium text-gray-700 mt-4">
-                          Others
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Describe other collaborative focus..."
-                          value={formData.onboarding.details.collaborativeOther}
-                          onChange={(e) =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              onboarding: {
-                                ...prev.onboarding,
-                                details: {
-                                  ...prev.onboarding.details,
-                                  collaborativeOther: e.target.value,
-                                },
-                              },
-                            }))
-                          }
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {formData.onboarding.details.projectMode === "transfer" && (
-                    <>
-                      <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Topic of Interest
-                        </label>
-                        <select
-                          name="onboarding.details.discussionMatter"
-                          value={formData.onboarding.details.discussionMatter}
-                          onChange={handleChange}
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                        >
-                          <option value="">Select Topic of Interest</option>
-                          {discussionMatterOptions.map((topic, i) => (
-                            <option key={i} value={topic}>
-                              {topic}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      {/* Improved Specific Option Dropdown */}
-                      {showSpecificOptions && (
-                        <div className="md:col-span-2">
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Specific {formData.onboarding.details.discussionMatter}
-                          </label>
-                          <Select
-                            options={specificOptions.map((option) => ({
-                              value: option,
-                              label: option,
-                            }))}
-                            value={
-                              formData.onboarding.details.specificOption
-                                ? {
-                                    value: formData.onboarding.details.specificOption,
-                                    label: formData.onboarding.details.specificOption,
-                                  }
-                                : null
-                            }
-                            onChange={(selected) =>
+                    <div className="space-y-2">
+                      {[
+                        "Product Development",
+                        "Process Optimization",
+                        "Shelf-life Extension",
+                      ].map((option) => (
+                        <label key={option} className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            value={option}
+                            checked={formData.onboarding.details.collaborativeOptions?.includes(
+                              option
+                            )}
+                            onChange={(e) => {
+                              const updated = e.target.checked
+                                ? [
+                                    ...formData.onboarding.details
+                                      .collaborativeOptions,
+                                    option,
+                                  ]
+                                : formData.onboarding.details.collaborativeOptions.filter(
+                                    (o) => o !== option
+                                  );
                               setFormData((prev) => ({
                                 ...prev,
                                 onboarding: {
                                   ...prev.onboarding,
                                   details: {
                                     ...prev.onboarding.details,
-                                    specificOption: selected ? selected.value : "",
+                                    collaborativeOptions: updated,
                                   },
                                 },
-                              }))
-                            }
-                            placeholder={`Select or search ${formData.onboarding.details.discussionMatter}`}
-                            isClearable
-                            menuPortalTarget={document.body}
-                            menuPosition="fixed"
-                            styles={{
-                              control: (provided, state) => ({
-                                ...provided,
-                                backgroundColor: "#f0f6ff",
-                                borderColor: state.isFocused ? "#3b82f6" : "#d1d5db",
-                                boxShadow: state.isFocused ? "0 0 0 2px #3b82f6" : "",
-                                borderRadius: "0.5rem", // field stays slightly rounded
-                                minHeight: 48,
-                                fontSize: "1rem",
-                                padding: "2px 0",
-                                transition: "border-color 0.2s, box-shadow 0.2s",
-                                "&:hover": { borderColor: "#3b82f6" },
-                                zIndex: 1,
-                              }),
-                              menu: (provided) => ({
-                                ...provided,
-                                zIndex: 9999,
-                                maxHeight: 300,
-                                borderRadius: "0.75rem", // less curved dropdown
-                                boxShadow: "0 8px 24px 0 rgba(59, 130, 246, 0.10)",
-                                backgroundColor: "#fff",
-                                overflow: "hidden",
-                              }),
-                              option: (provided, state) => ({
-                                ...provided,
-                                fontSize: "1rem",
-                                backgroundColor: state.isSelected
-                                  ? "#3b82f6"
-                                  : state.isFocused
-                                  ? "#e0e7ff"
-                                  : "#fff",
-                                color: state.isSelected ? "#fff" : "#1e293b",
-                                cursor: "pointer",
-                                transition: "background 0.15s",
-                                borderRadius: "0.5rem", // less curved options
-                                margin: "2px 8px",
-                                paddingLeft: 16,
-                              }),
-                              menuList: (provided) => ({
-                                ...provided,
-                                maxHeight: 250,
-                                overflowY: "auto",
-                                paddingTop: 8,
-                                paddingBottom: 8,
-                                borderRadius: "0.75rem",
-                              }),
-                              placeholder: (provided) => ({
-                                ...provided,
-                                color: "#64748b",
-                                fontSize: "1rem",
-                              }),
-                              singleValue: (provided) => ({
-                                ...provided,
-                                color: "#1e293b",
-                                fontSize: "1rem",
-                              }),
-                              input: (provided) => ({
-                                ...provided,
-                                color: "#1e293b",
-                                fontSize: "1rem",
-                              }),
-                              indicatorSeparator: () => ({
-                                display: "none",
-                              }),
-                              dropdownIndicator: (provided, state) => ({
-                                ...provided,
-                                color: state.isFocused ? "#3b82f6" : "#64748b",
-                                "&:hover": { color: "#3b82f6" },
-                                transition: "color 0.2s",
-                              }),
-                              clearIndicator: (provided) => ({
-                                ...provided,
-                                color: "#64748b",
-                                "&:hover": { color: "#3b82f6" },
-                                transition: "color 0.2s",
-                              }),
+                              }));
                             }}
-                            menuPlacement="auto"
                           />
-                        </div>
-                      )}
-                    </>
-                  )}
+                          {option}
+                        </label>
+                      ))}
 
-                  {/* Contact Person Fields (moved from step 2) */}
-                  {/* <div className="md:col-span-2">
+                      {/* Others input */}
+                      <label className="block text-sm font-medium text-gray-700 mt-4">
+                        Others
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Describe other collaborative focus..."
+                        value={formData.onboarding.details.collaborativeOther}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            onboarding: {
+                              ...prev.onboarding,
+                              details: {
+                                ...prev.onboarding.details,
+                                collaborativeOther: e.target.value,
+                              },
+                            },
+                          }))
+                        }
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {formData.onboarding.details.projectMode === "transfer" && (
+                  <>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Topic of Interest
+                      </label>
+                      <select
+                        name="onboarding.details.discussionMatter"
+                        value={formData.onboarding.details.discussionMatter}
+                        onChange={handleChange}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      >
+                        <option value="">Select Topic of Interest</option>
+                        {discussionMatterOptions.map((topic, i) => (
+                          <option key={i} value={topic}>
+                            {topic}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Specific Option Dropdown */}
+                    {showSpecificOptions && (
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Specific{" "}
+                          {formData.onboarding.details.discussionMatter}
+                        </label>
+                        <select
+                          name="onboarding.details.specificOption"
+                          value={formData.onboarding.details.specificOption}
+                          onChange={handleChange}
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        >
+                          <option value="">
+                            Select{" "}
+                            {formData.onboarding.details.discussionMatter}
+                          </option>
+                          {specificOptions.map((option, idx) => (
+                            <option key={idx} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Type
+                  </label>
+                  <select
+                    name="onboarding.details.type"
+                    value={formData.onboarding.details.type}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  >
+                    <option value="">Select Type</option>
+                    {typeOptions.map((t, i) => (
+                      <option key={i} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Contact Person Fields (moved from step 2) */}
+                {/* <div className="md:col-span-2">
                   <h4 className="text-lg font-medium text-gray-800 mb-3 mt-6">
                     Contact Information
                   </h4>
@@ -1558,22 +1413,20 @@ const UserRegister = () => {
                     </div>
                   </div>
                 </div> */}
-                </div>
-
-                <div className="flex justify-end mt-6">
-                  <button
-                    type="submit"
-                    className="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center"
-                  >
-                    Register <CheckIcon className="w-5 h-5 ml-2" />
-                  </button>
-                </div>
               </div>
-            </form>
-          </div>
+
+              <div className="flex justify-end mt-6">
+                <button
+                  type="submit"
+                  className="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center"
+                >
+                  Register <CheckIcon className="w-5 h-5 ml-2" />
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

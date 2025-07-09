@@ -1,11 +1,23 @@
-import { useState, useEffect, useRef } from "react";
-import { Search, Filter, Loader2, Info } from "lucide-react";
+import axios from "axios";
+import { useEffect, useState, useRef } from "react";
+import { Search, Filter, Info, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 
-// Add info for specific technologies here
-const technologyInfo = {
-  "Sugar Free Biscuit": `
+const TechnologiesPage = () => {
+  const [technologies, setTechnologies] = useState([]);
+
+  useEffect(() => {
+    const fetchTechnologies = async () => {
+      const res = await axios.get("http://localhost:5000/technologies");
+      setTechnologies(res.data);
+    };
+    fetchTechnologies();
+  }, []);
+
+  // Add info for specific technologies here
+  const technologyInfo = {
+    "Sugar Free Biscuit": `
 Introduction
 Sugar-free biscuits are made from soft dough using the creaming method and processed in a rotary moulder. These biscuits are baked in a continuous tunnel-type oven, similar to sweet "gluco" type biscuits. Unlike regular "gluco" biscuits that contain about 450 calories and 20–25% sugar, sugar-free biscuits have no added sugar. When packed in polypropylene pouches, metallised polyester, or biaxially oriented polypropylene, they can be stored at ambient conditions for more than four months without changes in texture, flavor, or eating quality.
 
@@ -50,7 +62,7 @@ Production Capacity (Estimate)
 Technology / Manufacturing Process
 The technology for producing sugar-free biscuits was developed at CFTRI, Mysore. It uses appropriate equipment for optimal product recovery and quality. CFTRI offers technical assistance and guidance for setting up and implementing the project under consultancy arrangements.
 `,
-  "Baking Powder": `
+    "Baking Powder": `
 Overview
 Baking powder is a widely used chemical leavener in bakery products. Its efficiency depends on the amount of carbon dioxide released upon wetting due to the acid component reacting with sodium bicarbonate. According to IS:1159 (1981), a minimum of 12% carbon dioxide should be available by weight.
 
@@ -85,10 +97,10 @@ Financials
 Annual Cost of Sales: Rs. 27,00,000
 Annual Sales Returns: Rs. 35,10,000
 `,
-  "Cereal flakes: jowar":
-    "Ready-to-eat flakes made from jowar (sorghum), rich in fiber and nutrients.",
-  "Spice mix: Puliogere": "A traditional South Indian spice mix used for rice dishes.",
-  "Bread: Production (Brown, Plain, Sweet, Milk, Whole wheat, Fruit, High fiber, Ragi, Bajra)": `
+    "Cereal flakes: jowar":
+      "Ready-to-eat flakes made from jowar (sorghum), rich in fiber and nutrients.",
+    "Spice mix: Puliogere": "A traditional South Indian spice mix used for rice dishes.",
+    "Bread: Production (Brown, Plain, Sweet, Milk, Whole wheat, Fruit, High fiber, Ragi, Bajra)": `
 INTRODUCTION
 Wheat production has doubled in the last 20 years. At present, India is self-sufficient in wheat and in the years to come it may have surplus wheat. Mostly wheat is consumed in North India in the form of chapatti, roti, and while in Southern States, it is slowly catching up. There is a need for popularizing wheat and wheat products throughout the country for extending the supplies of other foods. Bread is an important ready-to-eat food product which is becoming increasingly popular amongst the Indian population. Product characteristics are:
 i) It is intermediate moisture food
@@ -117,7 +129,7 @@ d. Optimum capacity utilization: 70%
 TECHNOLOGY/MANUFACTURING PROCESS – Availability
 CFTRI has standardized the technology and general methods of processing of different types of bread. However, the formulation/recipe can vary to make different types of bread within the level of quality standards. Apart from this, procedure for quality control, packing and packaging material specifications, equipment details are also provided by the Institute.
 `,
-  "Composite Bajra Bread": `
+    "Composite Bajra Bread": `
 INTRODUCTION
 Bajra is one of the important millet crops grown in India. It is known by different names in different regions, such as Bajra in Hindi, Pearl millet in English, Kambu in Tamil, and Bajri in Gujarati. Bajra is a drought-resistant crop and can be grown in arid and semi-arid regions where other crops fail. It is a rich source of protein, fiber, and essential minerals like iron, zinc, and phosphorus. Bajra is also known for its health benefits, including its ability to reduce cholesterol, control blood sugar levels, and aid in digestion.
 
@@ -172,7 +184,7 @@ PRODUCTION CAPACITY (estimate)
 - Installed capacity: 170 tonnes/year
 - Optimum capacity utilization: 70%
 `,
-  "Composite Ragi Rusk": `
+    "Composite Ragi Rusk": `
 INTRODUCTION
 Ragi, also known as finger millet, is a nutritious cereal grain widely grown in Africa and Asia. It is known by different names in different regions, such as Ragi in Hindi, Nachni in Marathi, and Mandua in Punjabi. Ragi is a rich source of calcium, iron, protein, and dietary fiber. It is also known for its health benefits, including its ability to reduce blood sugar levels, aid in digestion, and promote weight loss.
 
@@ -231,7 +243,7 @@ PRODUCTION CAPACITY (estimate)
 - Installed capacity: 170 tonnes/annum
 - Optimum capacity utilization: 70%
 `,
-  "Onion Flavoured Biscuit": `
+    "Onion Flavoured Biscuit": `
 INTRODUCTION
 Onion is an important and indispensable item in every kitchen as a condiment and vegetable. The major value lies in its pungency of the flavour due to the presence of sulfur-bearing compounds called allyl sulfide or propyl sulfide in the volatile oil of plant juice. Use of onion in biscuit making results in the development of an entirely new product with the typical flavour of onion. Currently, there are no such biscuits available in the Indian market; hence, onion biscuits have high opportunity to be manufactured as a novel product.
 
@@ -272,7 +284,7 @@ Optimum capacity utilization: 70%
 TECHNOLOGY / MANUFACTURING PROCESS – AVAILABILITY
 The technology for processing of onion flavored biscuits has been developed at CFTRI, Mysore using appropriate equipment for optimal product recovery of right quality. The institute has the necessary expertise to provide technical assistance and guidance for setting up the project and implementation, under technical consultancy arrangements.
 `,
-  "Wheat Germ Stabilization": `
+    "Wheat Germ Stabilization": `
 1. Name of the process: STABILISATION OF WHEAT GERM
 
 2. Brief Description of the Process:
@@ -281,7 +293,7 @@ Stabilization of wheat germ is achieved by dry heat treatment. The moisture cont
 3. Use of the Process:
 Wheat Germ is a nutritional capsule containing a high amount of protein of excellent quality, comparable to the quality of egg protein. It is also a rich source of oil, particularly of unsaturated nature, and minerals. Wheat Germ is a rich source of B-group vitamins and is the richest source of vitamin-E. It can be used as a food supplement and as a breakfast cereal. Due to the presence of high content of fat and lipolytic enzymes, wheat germ needs to be stabilized for enhancing the shelf-life.
 `,
-  "Sugar Free Cup Cake": `
+    "Sugar Free Cup Cake": `
 INTRODUCTION
 With the increasing health awareness in the people, there is tremendous scope for the market of health bakery products. Presently, 2.5% of the urban population and 1.5% of the rural population suffer from diabetes. Sugar free cup cake is a novel product developed to suit the needs of diabetic population.
 
@@ -298,7 +310,7 @@ Ingredients → Sifting of dry ingredients → Mixing → Addition of flour, bak
 PLANT AND MACHINERY
 Weighing machine, Mixer, Baking pans, Baking oven and cooling racks could be used for the preparation of sugar free cup cake.
 `,
-  "Sugar Free Rusk": `
+    "Sugar Free Rusk": `
 INTRODUCTION
 Sugar free rusk is a novel therapeutic product specially suited for diabetic patients. The shelf life of the product is about 3 months.
 
@@ -311,7 +323,7 @@ Wheat flour, yeast, salt, milk powder, etc.
 PLANT AND MACHINERY
 Weighing machine, Mixer, Baking pans, Baking oven, slicing machine and cooling racks could be used for the preparation of sugar free rusk.
 `,
-  "Instant Payasam Mix": `
+    "Instant Payasam Mix": `
 INTRODUCTION
 Payasam mix is a most common traditional food item. It consists of toasted raisins, cashew and vermicelli in hydrogenated fat. Toasted vermicelli along with raisins and cashew are mixed with other ingredients and packed into polypropylene bags.
 
@@ -332,7 +344,7 @@ Capacity of production: 300 tonnes/annum (1000 kg/day)
 Cost of plant and equipments: Rs. 5.5 lakhs
 Total project cost: Rs. 34.4 lakhs
 `,
-"Barley Instant Upma, Halwa and Rava Idly Mix": `
+    "Barley Instant Upma, Halwa and Rava Idly Mix": `
 Barley is among the most ancient of the cereal crops and it is the fourth most important cereal in the world in terms of production.
 
 ✓ Barley has numerous health benefits:
@@ -342,7 +354,7 @@ iii. Reduces serum LDL cholesterol
 
 ✓ Renewed interest in barley for food uses largely centers around the effects of β-glucans on lowering blood cholesterol levels and glycemic index.
 `,
- "High Protein Rusk": `
+    "High Protein Rusk": `
 INTRODUCTION
 High protein rusk is specially suited as a protein snack item. It is golden brown in colour, with a crisp texture and typical taste and flavour. The product is acceptable to customers and finds extensive use as a healthy snack item. There is very good scope for marketing.
 
@@ -358,7 +370,7 @@ Mixing of sponge → Addition of flours → Scaling → Mixing → Scaling → B
 EQUIPMENTS
 Weighing machine, mixer, baking pans, baking oven, slicing machine, and cooling racks could be used for the preparation of high protein rusk.
 `,
-"Instant Cake Mix": `
+    "Instant Cake Mix": `
 INTRODUCTION
 Instant cake mix is a premix containing all the ingredients normally used for the preparation of cake. Cakes could be easily prepared from such premix by adding a required quantity of water to the premix and mixing for a specified period of time and baking the batter in a baking oven. It adds variety to snack foods in the household. The advantage of the use of such mix is convenience as it eliminates the drudgery of purchasing ingredients in small quantities, weighing them and creaming them separately for a longer duration during the preparation of batter, which is a very cumbersome procedure.
 
@@ -379,7 +391,7 @@ Capacity of production: 150 tonnes/annum
 Cost of plant and equipments: Rs. 9.0 Lakhs
 Project cost: Rs. 13.5 Lakhs
 `,
-"Wheat Vermicelli": `
+    "Wheat Vermicelli": `
 INTRODUCTION
 In India the pasta products are one of the most ancient forms in which wheat has been consumed. Pasta is the Italian word for paste, a mixture of flour and salt. The use of wheat in pasta products is more widespread in the world, when compared to bread because pasta products are simpler to make and quick to serve, if dried can be conveniently stored for a relatively long period of time without deterioration.
 
@@ -400,7 +412,7 @@ Capacity of production: 290 tonnes/annum
 Cost of plant and equipments: Rs. 5.60 Lakhs
 Total project cost: Rs. 28.74 Lakhs
 `,
-"Fortified Protein Rich Vermicelli": `
+    "Fortified Protein Rich Vermicelli": `
 INTRODUCTION
 Pasta products are one of the most ancient forms in which wheat has been consumed. The use of wheat in pasta products is more widespread in the world, when compared to bread, because pasta products are simpler to make and quick to serve. If dried, they can be conveniently stored for a relatively long period of time without deterioration. Pasta production must be attributed to being easy to prepare, readily available, lower cost, longer shelf life, and could be consumed in various forms. The protein content could be increased by the addition of protein rich flour. Thus, high protein vermicelli has great potential due to its better nutritional status and hence has higher opportunity value.
 
@@ -438,7 +450,7 @@ Optimum capacity utilization: 70%
 TECHNOLOGY/MANUFACTURING PROCESS – Availability
 CFTRI has standardized the technology and general methods of processing of fortified protein rich vermicelli. Apart from this, procedure for quality control, packaging and packaging material specifications, equipment details are also provided by the institute.
 `,
-"Layered Parotta (South Indian)": `
+    "Layered Parotta (South Indian)": `
 INTRODUCTION
 Parotta is generally prepared and consumed fresh along with adjuncts in households and restaurants, as well as in roadside shops. Parotta is a wheat flour-based unleavened flat bread of South India. There is no scientific information available on the manufacture of parotta under ideal conditions and demand for ready-to-eat chapattis is increasing in the Indian market. Hence, there is a need to develop an optimized formulation and processing conditions for the preparation of parotta in order to obtain consistent and improved quality product.
 
@@ -474,7 +486,7 @@ Optimum utilization capacity: 70%
 TECHNOLOGY/MANUFACTURING PROCESS – Availability
 The technology for the manufacture of South Indian Parotta has been developed at CFTRI, Mysore, using appropriate equipment for optimal product recovery of right quality. The CFTRI has the necessary expertise to provide technical assistance and guidance for setting up the project. The CFTRI can offer further technical assistance for project implementation under technical consultancy arrangements.
 `,
-"Sugar Free Cake Rusk": `
+    "Sugar Free Cake Rusk": `
 INTRODUCTION
 Sugar free cake is a novel therapeutic product specially suited for diabetic patients. There is a good scope for the marketing of therapeutic products as it is not being produced in the country.
 
@@ -490,7 +502,7 @@ Ingredients → Sifting of dry ingredients → Mixing → Addition of flour, bak
 PLANT AND MACHINERY
 Weighing machine, mixer, baking pans, baking oven, slicing machine, and cooling racks could be used for the preparation of sugar free cake rusk.
 `,
-"Suruchi Meetha Burfi": `
+    "Suruchi Meetha Burfi": `
 INTRODUCTION
 Sugar free cake is a novel therapeutic product specially suited for diabetic patients. There is a good scope for the marketing of therapeutic products as it is not being produced in the country.
 
@@ -506,7 +518,7 @@ Ingredients → Sifting of dry ingredients → Mixing → Addition of flour, bak
 PLANT AND MACHINERY
 Weighing machine, mixer, baking pans, baking oven, slicing machine, and cooling racks could be used for the preparation of sugar free cake rusk.
 `,
-"Honey Based Bakery Products": `
+    "Honey Based Bakery Products": `
 (Plain Bread, Sweet Bread, Buns, Bar Cake, Muffins, Eggless Cake, Sponge Rolls, Cream Biscuits, Cookies, Doughnuts, Rolls, Danish Pastry, Croissants)
 
 INTRODUCTION
@@ -530,81 +542,80 @@ Working capital margin (15 days): 0.25
 TECHNOLOGY / MANUFACTURING PROCESS - AVAILABILITY
 The technology for processing of honey based bakery products has been developed at CFTRI, Mysore using appropriate equipment for optimal product recovery of right quality. The institute has the necessary expertise to provide technical assistance and guidance for setting up the project and implementation, under technical consultancy arrangements.
 `,
-  // Add more as needed...
-};
+    // Add more as needed...
+  };
 
-const TechnologiesPage = () => {
   const bakeryProductOptions = [
-  "Barley Instant Upma, Halwa and Rava Idly Mix",
-  "Sugar Free Biscuit",
-  "Baking Powder",
-  "Composite Bajra Bread",
-  "Composite Ragi Rusk",
-  "Onion Flavoured Biscuit",
-  "Wheat Germ Stabilization",
-  "Sugar Free Cup Cake",
-  "Instant Payasam Mix",
-  "Sugar Free Rusk",
-  "High Protein Rusk",
-  "Instant Cake Mix",
-  "Wheat Vermicelli",
-  "Fortified Protein Rich Vermicelli",
-  "Layered Parotta (South Indian)",
-  "Sugar Free Cake Rusk",
-  "Suruchi Meetha Burfi",
-  "Honey Based Bakery Products",
-  "Sugar Free Bread",
-  "Eggless Cake Premix",
-  "High Protein Biscuits",
-  "Shelf Stable Chapathi",
-  "Legume Based Pasta",
-  "Online Fortification of Atta or Maida",
-  "Fortified Whole Wheat Pasta",
-  "Production of Atta (Whole Wheat Flour)",
-  "Multigrain Bread",
-  "Gluten Free Bakery Products",
-  "Fenugreek Fiber & Gum",
-  "Low Glycemic Index (GI) Noodles",
-  "Atta with Multi Grains / Multi Whole Grains Flour",
-  "Multigrain Gluten Free Semolina (Sooji/Rava)",
-  "Multigrain Gluten Free Instant Halwa Mix",
-  "Multigrain Gluten Free Instant Rava Idli Mix",
-  "Multigrain Gluten Free Instant Upma Mix",
-  "Production of Pearl Millet Semolina (Sooji/Rava)",
-  "Production of Sorghum (Jowar) Semolina (Sooji/Rava)",
-  "Chocolate Pasta",
-  "Production of Refined Wheat Flour, Semolina & Resultant Atta by Roller Milling (UPDATED)",
-  "Shelf Stable Bread",
-  "Shelf Stable Muffins",
-  "Multigrain Pasta",
-  "Nutritious Soup/Bread Sticks",
-  "Baked Savory Snacks",
-  "Chestnut Based Gluten Free Cookies",
-  "TEST Record",
-  "Spice Bread",
-  "A Process for the Preparation of Bar Cake",
-  "Production of Ragi Biscuits",
-  "A Manufacturing Process for Multigrain Waffle",
-  "Bread: Production",
-  "Bar Cake",
-  "Sugar Free Cake Rusk",
-  "Instant Upma, Halva & Rava Idli Mix From Multigrain Semolina",
-  "Instant Upma & Rava Idli Mix From High Protein Semolina",
-  "Instant Upma Mix From Millets & Multimillets Semolina",
-  "Instant Halva Mix From Millets & Multimillets Semolina",
-  "Instant Rava Idli Mix From Millets & Multimillets Semolina",
-  "Production of High Fiber Semolina (Sooji/Rava)",
-  "Production of High Protein Semolina (Sooji/Rava)",
-  "Buckwheat Noodles/Pasta",
-  "Gluten Free Biscuits",
-  "Gluten Free Cookie Cake",
-  "Multigrain Nutri Cookies",
-  "Process for Production of Quinoa Germ",
-  "Fiber Enriched Rusk",
-  "Multigrain Pizza Base",
-  "Gluten Free Bread Premix – Proso Millet",
-  "Gluten Free Bread Premix – Foxtail Millet",
-  "Gluten Free Bread Premix – Barnyard Millet",
+    "Barley Instant Upma, Halwa and Rava Idly Mix",
+    "Sugar Free Biscuit",
+    "Baking Powder",
+    "Composite Bajra Bread",
+    "Composite Ragi Rusk",
+    "Onion Flavoured Biscuit",
+    "Wheat Germ Stabilization",
+    "Sugar Free Cup Cake",
+    "Instant Payasam Mix",
+    "Sugar Free Rusk",
+    "High Protein Rusk",
+    "Instant Cake Mix",
+    "Wheat Vermicelli",
+    "Fortified Protein Rich Vermicelli",
+    "Layered Parotta (South Indian)",
+    "Sugar Free Cake Rusk",
+    "Suruchi Meetha Burfi",
+    "Honey Based Bakery Products",
+    "Sugar Free Bread",
+    "Eggless Cake Premix",
+    "High Protein Biscuits",
+    "Shelf Stable Chapathi",
+    "Legume Based Pasta",
+    "Online Fortification of Atta or Maida",
+    "Fortified Whole Wheat Pasta",
+    "Production of Atta (Whole Wheat Flour)",
+    "Multigrain Bread",
+    "Gluten Free Bakery Products",
+    "Fenugreek Fiber & Gum",
+    "Low Glycemic Index (GI) Noodles",
+    "Atta with Multi Grains / Multi Whole Grains Flour",
+    "Multigrain Gluten Free Semolina (Sooji/Rava)",
+    "Multigrain Gluten Free Instant Halwa Mix",
+    "Multigrain Gluten Free Instant Rava Idli Mix",
+    "Multigrain Gluten Free Instant Upma Mix",
+    "Production of Pearl Millet Semolina (Sooji/Rava)",
+    "Production of Sorghum (Jowar) Semolina (Sooji/Rava)",
+    "Chocolate Pasta",
+    "Production of Refined Wheat Flour, Semolina & Resultant Atta by Roller Milling (UPDATED)",
+    "Shelf Stable Bread",
+    "Shelf Stable Muffins",
+    "Multigrain Pasta",
+    "Nutritious Soup/Bread Sticks",
+    "Baked Savory Snacks",
+    "Chestnut Based Gluten Free Cookies",
+    "TEST Record",
+    "Spice Bread",
+    "A Process for the Preparation of Bar Cake",
+    "Production of Ragi Biscuits",
+    "A Manufacturing Process for Multigrain Waffle",
+    "Bread: Production",
+    "Bar Cake",
+    "Sugar Free Cake Rusk",
+    "Instant Upma, Halva & Rava Idli Mix From Multigrain Semolina",
+    "Instant Upma & Rava Idli Mix From High Protein Semolina",
+    "Instant Upma Mix From Millets & Multimillets Semolina",
+    "Instant Halva Mix From Millets & Multimillets Semolina",
+    "Instant Rava Idli Mix From Millets & Multimillets Semolina",
+    "Production of High Fiber Semolina (Sooji/Rava)",
+    "Production of High Protein Semolina (Sooji/Rava)",
+    "Buckwheat Noodles/Pasta",
+    "Gluten Free Biscuits",
+    "Gluten Free Cookie Cake",
+    "Multigrain Nutri Cookies",
+    "Process for Production of Quinoa Germ",
+    "Fiber Enriched Rusk",
+    "Multigrain Pizza Base",
+    "Gluten Free Bread Premix – Proso Millet",
+    "Gluten Free Bread Premix – Foxtail Millet",
+    "Gluten Free Bread Premix – Barnyard Millet",
   ];
 
   const beverageProductOptions = [
@@ -761,7 +772,6 @@ const TechnologiesPage = () => {
     "Forming and frying machine for foods",
     "Domestic dough shaping & forming machine",
     "Continuous dough sheet extruder",
-    "Tiny Rice Mill",
     "Continuous wet cum dry grinding machine for foods (Colloidal mill)",
     "3 A device for continuous forming and frying of boondi",
     "Annatto seed separator",
@@ -1142,7 +1152,6 @@ const TechnologiesPage = () => {
                 `}
                               onMouseEnter={() => {
                                 if (technologyInfo[tech.name]) setHoveredTech(tech.id);
-                                if (popupCloseTimer.current) clearTimeout(popupCloseTimer.current);
                               }}
                               onMouseLeave={handleMouseLeave}
                             >
@@ -1237,17 +1246,15 @@ const TechnologiesPage = () => {
             {/* Render popup ONCE at the end, not inside the list */}
             {hoveredTech && (() => {
               const tech = filtered.find((t) => t.id === hoveredTech);
-              if (!tech || !technologyInfo[tech.name]) return null;
+              if (!tech) return null;
               return (
                 <div
                   style={{
-                    position: "fixed",
-                    top: "14vh", // increased from 10vh to 14vh to bring it slightly down
-                    right: "2vw",
-                    width: "660px",
-                    maxWidth: "99vw",
-                    height: "60vh",
-                    maxHeight: "700px",
+                    position: "fixed", // changed from "fixed"
+                    top: "80px",          // adjust as needed for your layout
+                    right: "40px",        // adjust as needed for your layout
+                    width: "600px",
+                    height: "70vh",
                     zIndex: 2000,
                     background: "rgba(30,41,59,0.10)",
                     display: "flex",
@@ -1262,8 +1269,10 @@ const TechnologiesPage = () => {
                       borderRadius: "1.5rem",
                       boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
                       border: "2px solid #a5b4fc",
-                      width: "100%",
-                      height: "100%",
+                      width: "600px",
+                      height: "70vh",
+                      maxWidth: "90vw",
+                      maxHeight: "90vh",
                       overflowY: "auto",
                       padding: "2.5rem 2rem",
                       position: "relative",
@@ -1303,7 +1312,7 @@ const TechnologiesPage = () => {
                         color: "#1e293b",
                         flex: 1,
                         overflowY: "auto",
-                        fontSize: "0.85rem", // reduced font size from default
+                        fontSize: "0.85rem",
                       }}
                     >
                       {technologyInfo[tech.name]}

@@ -80,59 +80,48 @@ router.delete("/", auth, async (req, res) => {
 
 router.post("/technology", auth, async (req, res) => {
   try {
-    const { category, item, topic } = req.body;
+    const { discussionMatter, specificOption } = req.body;
 
-    // Only users can add technologies
+    // map full label to your schema’s category enum
+    const categoryMap = {
+      "Bakery Products": "Bakery",
+      "Beverage Products": "Beverage",
+      "Cereal Products": "Cereal",
+      "Convenience Products": "Convenience",
+      "Food Machinery": "Machinery",
+      "Fruits & Vegetable Products": "FruitsVegetables",
+      "Meat & Marine Products": "MeatMarine",
+      "Microbiology & Fermentation": "Microbiology",
+      "Plantation & Spice Products": "PlantationSpice",
+      "Protein Specialty Products": "Protein",
+    };
+    const category = categoryMap[discussionMatter];
+    if (!category) {
+      return res
+        .status(400)
+        .json({ message: `Invalid discussionMatter: ${discussionMatter}` });
+    }
+
+    // only users have technologies
     if (req.user.role !== "user") {
       return res
         .status(403)
         .json({ message: "Only users can add technologies" });
     }
 
-    // Validate category
-    const allowedCategories = [
-      "Bakery",
-      "Beverage",
-      "Cereal",
-      "Convenience",
-      "Machinery",
-      "FruitsVegetables",
-      "MeatMarine",
-      "Microbiology",
-      "PlantationSpice",
-      "Protein",
-      "collaborative",
-      "transfer",
-    ];
-    if (!allowedCategories.includes(category)) {
-      return res.status(400).json({ message: "Invalid category" });
-    }
-
-    // Find user
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Make sure onboarding exists
-    if (!user.onboarding) {
-      user.onboarding = {};
-    }
-    if (!user.onboarding.technologies) {
-      user.onboarding.technologies = [];
-    }
-
-    // Save topic for transfer category
-    if (category === "transfer") {
-      if (!topic) {
-        return res.status(400).json({ message: "Topic of Interest is required for transfer" });
-      }
-      user.onboarding.technologies.push({ category, item, topic });
-    } else {
-      user.onboarding.technologies.push({ category, item });
-    }
+    // push new tech
+    user.onboarding.technologies.push({
+      item: specificOption,
+      category,
+    });
 
     await user.save();
+    // return full updated user (or you could send back just the technologies array)
     res.json(user);
   } catch (err) {
     console.error("Error adding technology:", err);

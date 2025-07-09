@@ -105,11 +105,8 @@ const userSchema = new mongoose.Schema(
               "Microbiology",
               "PlantationSpice",
               "Protein",
-              "collaborative",
-              "transfer",
             ],
           },
-          topic: { type: String }, // <-- ADD THIS LINE
           // Additional fields if needed
           description: { type: String },
           price: { type: Number },

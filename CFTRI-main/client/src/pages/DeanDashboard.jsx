@@ -49,23 +49,10 @@ const DeanDashboard = () => {
   const [flows, setFlows] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [flowSteps, setFlowSteps] = useState({
-    paymentReceived: "",
     userId: "",
-    paymentReceivedDetails: "",
-    entryIntoAMS: "",
-    entryIntoAMSDetails: "",
-    draftAgreement: "",
-    draftAgreementDetails: "",
-    dasian: "",
-    dasianDetails: "",
-    demonstrate: "",
-    demonstrateDetails: "",
-    certificateGeneration: "",
-    certificateGenerationDetails: "",
-    member: "",
-    memberDetails: "",
-    licenseDetails: "",
-    licenseDetailsDetails: "",
+    step: "",
+    date: "",
+    details: "",
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -116,7 +103,7 @@ const DeanDashboard = () => {
         setFlows(flowsData);
 
         const { data: usersData } = await axios.get(
-          "http://localhost:5000/coordinator/users",
+          "http://localhost:5000/api/dean/assigned-users",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setAllUsers(usersData);
@@ -143,11 +130,11 @@ const DeanDashboard = () => {
   const fetchAssignedUsers = useCallback(async () => {
     if (!dean) return;
     try {
-      const { data: mine } = await axios.get(
+      const { data } = await axios.get(
         "http://localhost:5000/admin/dean/processed-users",
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setAssignedUsers(mine);
+      setAssignedUsers(data);
     } catch (err) {
       console.error("couldn’t fetch assigned users", err);
       toast.error("Could not load your assigned users");
@@ -234,13 +221,10 @@ const DeanDashboard = () => {
     setExpandedCoordinator(expandedCoordinator === id ? null : id);
   };
 
-  // Tech Transfer Flow handlers (compact/old style)
+  // Tech Transfer Flow handlers
   const handleFlowChange = (e) => {
     const { name, value } = e.target;
-    setFlowSteps((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFlowSteps((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFlowSubmit = async (e) => {
@@ -381,8 +365,8 @@ const DeanDashboard = () => {
       <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 p-1 w-full">
         <div className="flex overflow-x-auto">
           {[
-            { id: "coordinators", label: "Staffs", icon: Users },
-            { id: "assignedUsers", label: "Assigned Clients", icon: Users },
+            { id: "coordinators", label: "Staff", icon: Users },
+            { id: "assignedUsers", label: "Assigned Client", icon: Users },
             { id: "techTransfer", label: "Tech Transfer", icon: Settings },
             { id: "annualReports", label: "Analytics", icon: BarChart2 },
           ].map((tab) => (
@@ -409,7 +393,7 @@ const DeanDashboard = () => {
 
       {/* Main Content */}
       <main className="space-y-6">
-        {/* Staffs Tab */}
+        {/* Coordinators Tab */}
         {selectedTab === "coordinators" && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             {/* Header with search and create */}
@@ -419,82 +403,34 @@ const DeanDashboard = () => {
                   Staff Management
                 </h2>
                 <p className="text-sm text-gray-500">
-                  Manage and oversee all staffs
+                  Manage and oversee all staff
                 </p>
               </div>
-              {/* Removed Add Staff button and search bar */}
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                <div className="relative flex-grow md:w-64">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search coordinators..."
+                    className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
+                  />
+                </div>
+                {/* Removed Add Coordinator button */}
+              </div>
             </div>
 
-            {/* Create Staff Section */}
-            {isCreating && (
-              <div className="p-6 border-b border-gray-200 bg-gray-50">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-800">
-                    Create New Staff
-                  </h3>
-                  <button
-                    onClick={() => setIsCreating(false)}
-                    className="text-gray-500 hover:text-gray-700"
-                  >
-                    <ChevronUp className="h-5 w-5" />
-                  </button>
-                </div>
-                <form onSubmit={handleCreate} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {["name", "email", "contact", "password"].map((field) => (
-                      <div key={field} className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          {field.charAt(0).toUpperCase() + field.slice(1)}
-                          {field === "password" && (
-                            <span className="text-red-500"> *</span>
-                          )}
-                        </label>
-                        <input
-                          type={field === "password" ? "password" : "text"}
-                          name={field}
-                          value={newCoord[field]}
-                          onChange={handleNewChange}
-                          required={field === "password"}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 transition-all"
-                          placeholder={`Enter ${field
-                            .replace(/([A-Z])/g, " $1")
-                            .toLowerCase()}`}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex justify-end space-x-3 pt-2">
-                    <button
-                      type="button"
-                      onClick={() => setIsCreating(false)}
-                      className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors flex items-center"
-                    >
-                      <Plus className="mr-1 h-4 w-4" />
-                      Create Staff
-                    </button>
-                  </div>
-                </form>
-              </div>
-            )}
-
-            {/* Staffs List */}
+            {/* Staff List */}
             <div className="divide-y divide-gray-200">
               {coords.length === 0 ? (
                 <div className="p-8 text-center">
                   <Users className="mx-auto h-12 w-12 text-gray-400 mb-3" />
                   <h3 className="text-lg font-medium text-gray-700 mb-1">
-                    No Staffs Found
+                    No Staff Found
                   </h3>
                   <p className="text-gray-500 mb-4">
-                    No staff available.
+                    Get started by adding your first staff
                   </p>
-                  {/* Removed Add Staff button */}
+                  {/* Removed Add Coordinator button */}
                 </div>
               ) : (
                 coords.map((coord) => {
@@ -564,7 +500,7 @@ const DeanDashboard = () => {
                               </div>
                             </div>
                             <div className="flex items-center space-x-2">
-                              {/* Removed Delete and Add Staff buttons */}
+                              {/* Removed Delete and Add Coordinator buttons */}
                               <button className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors">
                                 <MoreVertical className="h-5 w-5" />
                               </button>
@@ -679,52 +615,76 @@ const DeanDashboard = () => {
           </div>
         )}
 
-        {/* Assigned Clients Tab */}
+        {/* Assigned Client Tab */}
         {selectedTab === "assignedUsers" && (
-          <div className="bg-white p-6 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-bold mb-4">Your Assigned Clients</h2>
-            {assignedUsers.length === 0 ? (
-              <p>No clients have been assigned to you yet.</p>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Name
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Email
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Contact
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Assigned To
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {assignedUsers.map((u) => (
-                      <tr key={u._id}>
-                        <td className="px-4 py-2 text-sm text-gray-900">
-                          {u.name}
-                        </td>
-                        <td className="px-4 py-2 text-sm text-gray-700">
-                          {u.email}
-                        </td>
-                        <td className="px-4 py-2 text-sm text-gray-700">
-                          {u.contact || "—"}
-                        </td>
-                        <td className="px-4 py-2 text-sm text-gray-700">
-                          {dean.name}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-800 mb-1">
+                    Your Assigned Clients
+                  </h2>
+                  <p className="text-gray-500">
+                    Clients assigned to you for processing
+                  </p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors flex items-center">
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                    Refresh
+                  </button>
+                </div>
               </div>
-            )}
+
+              {assignedUsers.length === 0 ? (
+                <div className="bg-gray-50 p-8 rounded-lg border border-dashed border-gray-300 text-center">
+                  <Users className="mx-auto h-10 w-10 text-gray-400 mb-3" />
+                  <h4 className="text-gray-700 font-medium mb-1">
+                    No users assigned to you yet
+                  </h4>
+                  <p className="text-gray-500">
+                    Users will appear here once assigned by the admin
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {assignedUsers.map((user) => (
+                    <div
+                      key={user._id}
+                      className="bg-white p-4 rounded-lg border border-gray-200 hover:border-indigo-200 transition-colors shadow-xs"
+                    >
+                      <div className="flex items-start space-x-3">
+                        <div className="bg-indigo-100 p-3 rounded-full">
+                          <User className="text-indigo-600 h-5 w-5" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-medium text-gray-800">
+                            {user.name}
+                          </h3>
+                          <div className="mt-2 space-y-1">
+                            <div className="flex items-center text-sm text-gray-600">
+                              <span className="w-24 text-gray-500">
+                                Contact:
+                              </span>
+                              <span>{user.contact || "Not provided"}</span>
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <span className="w-24 text-gray-500">
+                                Coordinator:
+                              </span>
+                              <span>
+                                {user.onboarding?.details?.coordinator?.name ||
+                                  "Not assigned"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
 
@@ -791,8 +751,7 @@ const DeanDashboard = () => {
                   <option value="Dasian">Dasian</option>
                   <option value="Demonstrate">Demonstrate</option>
                   <option value="Certificate Generation">Certificate Generation</option>
-                  <option value="Member">Member</option>
-                  <option value="License Details">License Details</option>
+                  {/* Removed "Member" and "License Details" */}
                 </select>
               </div>
               <div className="flex-1">
@@ -868,11 +827,19 @@ const DeanDashboard = () => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {flows.map((flow) => {
-                        const user = allUsers.find((u) => u._id === flow.user);
+                        // Fix: Support both flow.user (object or string)
+                        let user = null;
+                        if (flow.user && typeof flow.user === "object") {
+                          user = flow.user;
+                        } else if (flow.user && Array.isArray(allUsers)) {
+                          user = allUsers.find((u) => u._id === flow.user);
+                        }
                         return flow.steps.map((step, idx) => (
                           <tr key={flow._id + idx}>
                             <td className="px-4 py-2 text-sm text-gray-900">
-                              {user ? `${user.name} (${user.email})` : "Unknown"}
+                              {user
+                                ? `${user.name} (${user.email})`
+                                : "Unknown"}
                             </td>
                             <td className="px-4 py-2 text-sm text-gray-700">
                               {step.name}

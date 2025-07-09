@@ -419,7 +419,7 @@ const CoordinatorDashboard = () => {
               </div>
               <div>
                 <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                  Clients
+                  Enquirers
                 </p>
                 <p className="text-xl font-bold text-indigo-600">
                   {stats?.userCount || 0}
@@ -769,7 +769,90 @@ const CoordinatorDashboard = () => {
                                 </div>
                               </div>
                             )}
-                            {/* REMOVE: Status update and process completed button from dashboard */}
+                            {/* Actions */}
+                            <div className="flex space-x-2">
+                              {editingStatus === user._id ? (
+                                <div className="flex items-center space-x-2">
+                                  <select
+                                    value={updatedStatus}
+                                    onChange={(e) =>
+                                      setUpdatedStatus(e.target.value)
+                                    }
+                                    className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                  >
+                                    <option value="Pending">Pending</option>
+                                    <option value="In Progress">
+                                      In Progress
+                                    </option>
+                                    <option value="Completed">Completed</option>
+                                  </select>
+                                  <button
+                                    onClick={() => handleStatusUpdate(user._id)}
+                                    className="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 flex items-center"
+                                  >
+                                    <Save className="h-4 w-4 mr-1" />
+                                    Save
+                                  </button>
+                                  <button
+                                    onClick={() => setEditingStatus(null)}
+                                    className="bg-gray-500 text-white px-3 py-2 rounded-lg hover:bg-gray-600 flex items-center"
+                                  >
+                                    <X className="h-4 w-4 mr-1" />
+                                    Cancel
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() =>
+                                    handleStatusChange(
+                                      user._id,
+                                      user.taskStatus
+                                    )
+                                  }
+                                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+                                >
+                                  <Edit className="h-4 w-4 mr-1" />
+                                  Update Status
+                                </button>
+                              )}
+                            </div>
+                            {!user.processed ? (
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    await axios.put(
+                                      `http://localhost:5000/coordinator/users/${user._id}/process-completed`,
+                                      {},
+                                      {
+                                        headers: {
+                                          Authorization: `Bearer ${token}`,
+                                        },
+                                      }
+                                    );
+                                    toast.success(
+                                      "User marked as Process Completed"
+                                    );
+                                    // refresh users or update state locally:
+                                    setUsers((us) =>
+                                      us.map((u) =>
+                                        u._id === user._id
+                                          ? { ...u, processed: true }
+                                          : u
+                                      )
+                                    );
+                                  } catch (err) {
+                                    toast.error("Failed to mark completed");
+                                  }
+                                }}
+                                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                              >
+                                Process Completed
+                              </button>
+                            ) : (
+                              <span className="text-sm text-gray-500">
+                                ✔ Process Completed
+                              </span>
+                            )}
                           </div>
                         )}
                       </div>
@@ -803,70 +886,6 @@ const CoordinatorDashboard = () => {
                 <ClipboardCheck className="h-5 w-5 mr-2 text-blue-600" />
                 Actions Log
               </h2>
-
-              {/* --- Update Status for Each Client --- */}
-              <div className="mb-8">
-                <h3 className="font-medium mb-3">Update Client Status</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Status Update Dropdown */}
-                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Select Client to Update Status
-                    </label>
-                    <select
-                      value={editingStatus || ""}
-                      onChange={(e) => {
-                        const userId = e.target.value;
-                        if (userId) {
-                          const user = users.find((u) => u._id === userId);
-                          setEditingStatus(userId);
-                          setUpdatedStatus(user?.taskStatus || "Pending");
-                        } else {
-                          setEditingStatus(null);
-                        }
-                      }}
-                      className="w-full p-2 border border-gray-300 rounded-lg mb-3"
-                    >
-                      <option value="">Select a client</option>
-                      {users.map((user) => (
-                        <option key={user._id} value={user._id}>
-                          {user.name} ({user.email})
-                        </option>
-                      ))}
-                    </select>
-                    {editingStatus && (
-                      <div className="flex items-center space-x-2">
-                        <select
-                          value={updatedStatus}
-                          onChange={(e) => setUpdatedStatus(e.target.value)}
-                          className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                          <option value="Pending">Pending</option>
-                          <option value="In Progress">In Progress</option>
-                          <option value="Completed">Completed</option>
-                        </select>
-                        <button
-                          onClick={() => handleStatusUpdate(editingStatus)}
-                          className="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 flex items-center"
-                        >
-                          <Save className="h-4 w-4 mr-1" />
-                          Save
-                        </button>
-                        <button
-                          onClick={() => setEditingStatus(null)}
-                          className="bg-gray-500 text-white px-3 py-2 rounded-lg hover:bg-gray-600 flex items-center"
-                        >
-                          <X className="h-4 w-4 mr-1" />
-                          Cancel
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  
-                </div>
-              </div>
-              {/* --- End Update Status for Each Client --- */}
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -990,64 +1009,6 @@ const CoordinatorDashboard = () => {
                     >
                       <Save className="h-4 w-4 mr-1" />
                       Log Action
-                    </button>
-                  </div>
-                  {/* Process Completed Dropdown */}
-                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Mark Process Completed
-                    </label>
-                    <select
-                      value={assignTaskData.userId || ""}
-                      onChange={(e) =>
-                        setAssignTaskData({
-                          ...assignTaskData,
-                          userId: e.target.value,
-                        })
-                      }
-                      className="w-full p-2 border border-gray-300 rounded-lg mb-3"
-                    >
-                      <option value="">Select a client</option>
-                      {users
-                        .filter((u) => !u.processed)
-                        .map((user) => (
-                          <option key={user._id} value={user._id}>
-                            {user.name} ({user.email})
-                          </option>
-                        ))}
-                    </select>
-                    <button
-                      disabled={!assignTaskData.userId}
-                      onClick={async () => {
-                        if (!assignTaskData.userId) return;
-                        try {
-                          await axios.put(
-                            `http://localhost:5000/coordinator/users/${assignTaskData.userId}/process-completed`,
-                            {},
-                            {
-                              headers: {
-                                Authorization: `Bearer ${token}`,
-                              },
-                            }
-                          );
-                          toast.success("User marked as Process Completed");
-                          setUsers((us) =>
-                            us.map((u) =>
-                              u._id === assignTaskData.userId
-                                ? { ...u, processed: true }
-                                : u
-                            )
-                          );
-                          setAssignTaskData({ ...assignTaskData, userId: null });
-                        } catch (err) {
-                          toast.error("Failed to mark completed");
-                        }
-                      }}
-                      className={`bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors ${
-                        !assignTaskData.userId ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
-                    >
-                      Mark as Completed
                     </button>
                   </div>
                 </div>
